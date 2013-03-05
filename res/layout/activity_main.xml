@@ -1,0 +1,62 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".MainActivity" >
+
+    <Button
+        android:id="@+id/setup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="28dp"
+        android:text="Device Setup" 
+        android:onClick= "onSetupClick"/>
+    	
+
+    <Button
+        android:id="@+id/join"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/setup"
+        android:layout_below="@+id/setup"
+        android:layout_marginTop="17dp"
+        android:text="Join Group" 
+        android:onClick= "onJoinClick"/>
+
+    <Button
+        android:id="@+id/start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/about"
+        android:layout_alignLeft="@+id/join"
+        android:layout_marginBottom="35dp"
+        android:text="Start Group" 
+        android:onClick= "onStartClick"/>
+    
+    <Button
+        android:id="@+id/about"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/start"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="72dp"
+        android:text="About" 
+        android:onClick= "onAboutClick"/>
+
+    <Button
+        android:id="@+id/currentConvo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/join"
+        android:layout_below="@+id/join"
+        android:layout_marginTop="16dp"
+        android:text="Current Converstation"
+        android:onClick="onCurrConvoClick" />
+
+</RelativeLayout>
