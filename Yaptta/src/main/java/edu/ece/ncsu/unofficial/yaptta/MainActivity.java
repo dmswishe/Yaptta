@@ -33,7 +33,7 @@ public class MainActivity extends Activity {
     	//startActivity(i);
 	}
     public void onJoinClick (View view) {
-    	Intent i = new Intent(getApplicationContext(), JoinActivity.class);
+    	Intent i = new Intent(getApplicationContext(), JoinGroupActivity.class);
     	startActivity(i);
 	}
     public void onStartClick (View view) {
@@ -45,8 +45,11 @@ public class MainActivity extends Activity {
     	startActivity(i); 
 	}
     public void onCurrConvoClick (View view) {
-    	Context context = getApplicationContext();
+    	/*Context context = getApplicationContext();
     	CharSequence text = "Current Convo Button clicked!";
-		Toast.makeText(context, text, Toast.LENGTH_SHORT).show();  
+		Toast.makeText(context, text, Toast.LENGTH_SHORT).show(); */
+    	Intent i = new Intent(getApplicationContext(), ConversationWindow.class);
+    	startActivity(i);
 	}
+    
 }

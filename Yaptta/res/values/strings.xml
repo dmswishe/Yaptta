@@ -7,5 +7,7 @@
     <string name="title_activity_start_group">StartGroup</string>
     <string name="title_activity_about">AboutActivity</string>
     <string name="title_activity_join">JoinActivity</string>
+    <string name="title_activity_discover_peers">DiscoverPeersActivity</string>
+    <string name="title_activity_conversation_window">ConversationWindowActivity</string>
 
 </resources>
