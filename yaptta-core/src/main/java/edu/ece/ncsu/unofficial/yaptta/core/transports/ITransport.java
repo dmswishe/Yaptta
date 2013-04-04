@@ -1,12 +1,12 @@
-package edu.ece.ncsu.unofficial.yaptta.core;
+package edu.ece.ncsu.unofficial.yaptta.core.transports;
 
+import edu.ece.ncsu.unofficial.yaptta.core.messages.AbstractMessage;
 import edu.ece.ncsu.unofficial.yaptta.core.messages.requests.AbstractRequest;
-import edu.ece.ncsu.unofficial.yaptta.core.messages.responses.AbstractResponse;
 
-public interface IMessageInterface {
+public interface ITransport {
 	
 	public static interface MessageReceivedCallback {
-		public void messageReceived(AbstractResponse response);		
+		public void messageReceived(AbstractMessage response);		
 	};
 	
 	public void sendMessage(AbstractRequest request);
