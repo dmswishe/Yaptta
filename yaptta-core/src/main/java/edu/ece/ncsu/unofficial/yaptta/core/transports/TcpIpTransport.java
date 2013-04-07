@@ -6,7 +6,6 @@ public class TcpIpTransport extends AbstractTransport {
 
 	@Override
 	public void sendMessage(AbstractRequest request) {
-		// TODO Auto-generated method stub
 		
 	}
 
