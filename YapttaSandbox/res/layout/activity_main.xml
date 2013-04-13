@@ -9,6 +9,7 @@
     tools:context=".MainActivity" >
 
     <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -24,18 +25,8 @@
                 android:id="@+id/textView1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Multicast"
+                android:text="Broadcast"
                 android:textAppearance="?android:attr/textAppearanceLarge" />
-
-            <Button
-                android:id="@+id/button1"
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:onClick="onListenClick"
-                android:text="Listen" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -60,9 +51,16 @@
                 android:layout_weight="1"
                 android:onClick="onSendClick"
                 android:text="Send" />
-
         </LinearLayout>
 
     </LinearLayout>
+
+    <android.widget.Space
+        android:id="@+id/space1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView2"
+        android:layout_alignTop="@+id/textView2"
+        android:layout_marginLeft="26dp" />
 
 </RelativeLayout>
