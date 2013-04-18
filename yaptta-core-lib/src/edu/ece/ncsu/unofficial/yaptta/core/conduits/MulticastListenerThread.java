@@ -12,7 +12,16 @@ import edu.ece.ncsu.unofficial.yaptta.core.messages.AbstractMessage;
 
 public class MulticastListenerThread implements Runnable {
 	
-	private final IMessageReceivedCallback callback;
+	private IMessageReceivedCallback callback;
+	
+	public IMessageReceivedCallback getCallback() {
+		return callback;
+	}
+
+	public void setCallback(IMessageReceivedCallback callback) {
+		this.callback = callback;
+	}
+
 	private final MulticastSocket socket;
 	
 	private volatile Boolean haltRequested = false; 

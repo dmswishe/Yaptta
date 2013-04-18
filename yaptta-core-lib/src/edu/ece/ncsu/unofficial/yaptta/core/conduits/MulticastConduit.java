@@ -78,12 +78,12 @@ public class MulticastConduit extends AbstractConduit {
 			byte[] bytes = baos.toByteArray();
 			final DatagramPacket packet = new DatagramPacket(bytes, bytes.length, this.groupAddress, this.groupPort);
 			Thread t = new Thread(new Runnable(){
+				// Need to do this in a new thread to avoid the NetworkOnMainThreadException
 				@Override
 				public void run() {
 					try {
 						socket.send(packet);
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}});
@@ -106,6 +106,13 @@ public class MulticastConduit extends AbstractConduit {
 		}
 	}
 	
+	@Override
+	public void setMessageReceivedCallback(IMessageReceivedCallback callback) {
+		if(isListening()) {
+			listenerThreadInstance.setCallback(callback);
+		}
+	}
+
 	@Override
 	public void startListening(IMessageReceivedCallback callback) throws ConduitException {
 		if(!isListening()) {
