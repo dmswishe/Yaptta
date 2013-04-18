@@ -1,4 +1,4 @@
-package edu.ece.ncsu.unofficial.yaptta.core.conduits;
+package edu.ece.ncsu.unofficial.yaptta.core.callbacks;
 
 import edu.ece.ncsu.unofficial.yaptta.core.messages.AbstractMessage;
 

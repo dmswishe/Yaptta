@@ -1,5 +1,6 @@
 package edu.ece.ncsu.unofficial.yaptta.core.conduits;
 
+import edu.ece.ncsu.unofficial.yaptta.core.callbacks.IMessageReceivedCallback;
 import edu.ece.ncsu.unofficial.yaptta.core.messages.AbstractMessage;
 
 public interface IConduit {

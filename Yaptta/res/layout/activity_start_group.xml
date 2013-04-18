@@ -18,11 +18,12 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/editGroupName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="text" >
+        android:inputType="text"
+        android:text="New Yaptta Group" >
 
         <requestFocus />
     </EditText>
@@ -35,22 +36,22 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <RadioGroup
-        android:id="@+id/radioGroup1"
+        android:id="@+id/rdoGroupType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" >
 
         <RadioButton
-            android:id="@+id/radio0"
+            android:id="@+id/rdoGroupTypeOpen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="Invite" />
+			android:checked="true"
+            android:text="Open" />
 
         <RadioButton
-            android:id="@+id/radio1"
+            android:id="@+id/rdoGroupTypeInvite"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Open" />
+            android:text="Invite" />
     </RadioGroup>
 
     <TextView
@@ -61,7 +62,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
-        android:id="@+id/password"
+        android:id="@+id/editGroupPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -75,24 +76,18 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <EditText
-        android:id="@+id/passConfirm"
+        android:id="@+id/editGroupPasswordConfirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPassword" />
 
     <Button
-        android:id="@+id/discoverPeers"
+        android:id="@+id/btnDiscoverPeers"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Discover Peers" 
-        android:onClick="onDiscoverPeersClick"/>
-
-    <Button
-        android:id="@+id/button2"
         android:layout_gravity="right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:onClick="onStartGroupClick"
         android:text="Start Group" />
 
 </LinearLayout>

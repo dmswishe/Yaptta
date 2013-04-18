@@ -1,6 +1,6 @@
 package edu.ece.ncsu.unofficial.yaptta.sandbox;
 
-import edu.ece.ncsu.unofficial.yaptta.core.Constants;
+import edu.ece.ncsu.unofficial.yaptta.core.YapttaConstants;
 import edu.ece.ncsu.unofficial.yaptta.core.conduits.ConduitException;
 import edu.ece.ncsu.unofficial.yaptta.core.conduits.MulticastConduit;
 import edu.ece.ncsu.unofficial.yaptta.core.messages.requests.PingRequest;
@@ -15,7 +15,7 @@ public class MainActivity extends Activity {
 
 	private Handler toastHandler = new Handler();
 	//private Runnable toastRunnable = new Runnable() {public void run() {Toast.makeText(Activity.this,...).show();}}
-	private MulticastConduit broadcastConduit = new MulticastConduit(Constants.Network.BROADCAST_PORT);
+	private MulticastConduit broadcastConduit = new MulticastConduit(YapttaConstants.Network.BROADCAST_PORT);
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

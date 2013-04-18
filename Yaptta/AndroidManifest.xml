@@ -50,7 +50,7 @@
             android:label="@string/title_activity_discover_peers" >
         </activity>
         <activity
-            android:name="edu.ece.ncsu.unofficial.yaptta.ConversationWindow"
+            android:name="edu.ece.ncsu.unofficial.yaptta.ConversationWindowActivity"
             android:label="@string/title_activity_conversation_window" >
         </activity>
     </application>

@@ -4,7 +4,7 @@ package edu.ece.ncsu.unofficial.yaptta;
 	import android.os.Bundle;
 	import android.app.Activity;
 	import android.view.Menu;
-public class ConversationWindow extends Activity{
+public class ConversationWindowActivity extends Activity{
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

@@ -1,6 +1,7 @@
 package edu.ece.ncsu.unofficial.yaptta.core.conduits;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -9,7 +10,8 @@ import java.net.MulticastSocket;
 import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.MulticastLock;
-import edu.ece.ncsu.unofficial.yaptta.core.Constants;
+import edu.ece.ncsu.unofficial.yaptta.core.YapttaConstants;
+import edu.ece.ncsu.unofficial.yaptta.core.callbacks.IMessageReceivedCallback;
 import edu.ece.ncsu.unofficial.yaptta.core.messages.AbstractMessage;
 
 public class MulticastConduit extends AbstractConduit {
@@ -29,7 +31,7 @@ public class MulticastConduit extends AbstractConduit {
 		{
 			// Latch the constructor parameters
 			this.groupPort = port;
-			this.groupAddress = InetAddress.getByName(Constants.Network.MULTICAST_ADDRESS);
+			this.groupAddress = InetAddress.getByName(YapttaConstants.Network.MULTICAST_ADDRESS);
 			
 			// Enable multicast functionality if running in Android
 			if(context != null)
@@ -41,8 +43,8 @@ public class MulticastConduit extends AbstractConduit {
 		
 			// Create the multicast socket and join the group
 			socket = new MulticastSocket(this.groupPort);
-			socket.setSoTimeout(Constants.Network.BLOCKING_TIMEOUT);
-			socket.setTrafficClass(Constants.Network.IPTOS_LOWDELAY);
+			socket.setSoTimeout(YapttaConstants.Network.BLOCKING_TIMEOUT);
+			socket.setTrafficClass(YapttaConstants.Network.IPTOS_LOWDELAY);
 			socket.joinGroup(this.groupAddress);
 			
 		} catch(Exception ex) {
@@ -59,6 +61,10 @@ public class MulticastConduit extends AbstractConduit {
 		this(null, port);
 	}
 	
+	public int getPort() {
+		return this.groupPort;
+	}
+	
 	@Override
 	public void sendMessage(AbstractMessage request) throws ConduitException {
 		try {
@@ -70,8 +76,18 @@ public class MulticastConduit extends AbstractConduit {
 			
 			// Wrap it up into a packet and send it off
 			byte[] bytes = baos.toByteArray();
-			DatagramPacket packet = new DatagramPacket(bytes, bytes.length, this.groupAddress, this.groupPort);
-			socket.send(packet);
+			final DatagramPacket packet = new DatagramPacket(bytes, bytes.length, this.groupAddress, this.groupPort);
+			Thread t = new Thread(new Runnable(){
+				@Override
+				public void run() {
+					try {
+						socket.send(packet);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}});
+			t.start();
 			
 			// Clean-up
 			oos.close();

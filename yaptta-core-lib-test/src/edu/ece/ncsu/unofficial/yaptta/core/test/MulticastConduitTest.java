@@ -3,19 +3,19 @@ package edu.ece.ncsu.unofficial.yaptta.core.test;
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.ece.ncsu.unofficial.yaptta.core.callbacks.SimpleMessageReceivedCallback;
 import edu.ece.ncsu.unofficial.yaptta.core.conduits.ConduitException;
 import edu.ece.ncsu.unofficial.yaptta.core.conduits.MulticastConduit;
-import edu.ece.ncsu.unofficial.yaptta.core.conduits.SimpleMessageReceivedCallback;
 import edu.ece.ncsu.unofficial.yaptta.core.messages.AbstractMessage;
 import edu.ece.ncsu.unofficial.yaptta.core.messages.requests.PingRequest;
-import edu.ece.ncsu.unofficial.yaptta.core.Constants;
+import edu.ece.ncsu.unofficial.yaptta.core.YapttaConstants;
 
 public class MulticastConduitTest {
 	private MulticastConduit mc;
 	
 	@Before
 	public void TestMulticastInit() throws ConduitException {
-		mc = new MulticastConduit(Constants.Network.BROADCAST_PORT);
+		mc = new MulticastConduit(YapttaConstants.Network.BROADCAST_PORT);
 	}
 	
 	@Test

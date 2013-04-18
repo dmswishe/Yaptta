@@ -6,7 +6,8 @@ import java.net.DatagramPacket;
 import java.net.MulticastSocket;
 import java.net.SocketTimeoutException;
 
-import edu.ece.ncsu.unofficial.yaptta.core.Constants;
+import edu.ece.ncsu.unofficial.yaptta.core.YapttaConstants;
+import edu.ece.ncsu.unofficial.yaptta.core.callbacks.IMessageReceivedCallback;
 import edu.ece.ncsu.unofficial.yaptta.core.messages.AbstractMessage;
 
 public class MulticastListenerThread implements Runnable {
@@ -31,7 +32,7 @@ public class MulticastListenerThread implements Runnable {
 	@Override
 	public void run() {
 		// Construct a buffer for us to work with
-		byte[] buffer = new byte[Constants.Network.DEFAULT_PACKET_BUFFER_SIZE];
+		byte[] buffer = new byte[YapttaConstants.Network.DEFAULT_PACKET_BUFFER_SIZE];
 		DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
 		
 		// Loop until we're disconnected/stopped/etc

@@ -6,7 +6,7 @@ import android.widget.Toast;
 import edu.ece.ncsu.unofficial.yaptta.core.messages.AbstractMessage;
 import edu.ece.ncsu.unofficial.yaptta.core.messages.requests.PingRequest;
 
-public class ToastCallback implements edu.ece.ncsu.unofficial.yaptta.core.conduits.IMessageReceivedCallback {
+public class ToastCallback implements edu.ece.ncsu.unofficial.yaptta.core.callbacks.IMessageReceivedCallback {
 
 	private Handler toastHandler;
 	private Context context;

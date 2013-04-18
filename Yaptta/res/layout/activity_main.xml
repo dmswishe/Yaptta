@@ -8,55 +8,68 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <Button
-        android:id="@+id/setup"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="28dp"
-        android:text="Device Setup" 
-        android:onClick= "onSetupClick"/>
-    	
+        android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/join"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/setup"
-        android:layout_below="@+id/setup"
-        android:layout_marginTop="17dp"
-        android:text="Join Group" 
-        android:onClick= "onJoinClick"/>
+        <LinearLayout
+            android:id="@+id/linearLayout1"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
 
-    <Button
-        android:id="@+id/start"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/about"
-        android:layout_alignLeft="@+id/join"
-        android:layout_marginBottom="35dp"
-        android:text="Start Group" 
-        android:onClick= "onStartClick"/>
-    
-    <Button
-        android:id="@+id/about"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/start"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="72dp"
-        android:text="About" 
-        android:onClick= "onAboutClick"/>
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Name"
+                android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <Button
-        android:id="@+id/currentConvo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/join"
-        android:layout_below="@+id/join"
-        android:layout_marginTop="16dp"
-        android:text="Current Converstation"
-        android:onClick="onCurrConvoClick" />
+            <EditText
+                android:id="@+id/editDeviceName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="DeviceABC" />
+
+            <Button
+                android:id="@+id/button1"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onSaveDeviceName"
+                android:text="Save" />
+            
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/join"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onJoinClick"
+            android:text="Join Group" />
+
+        <Button
+            android:id="@+id/start"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onStartClick"
+            android:text="Start Group" />
+
+        <Button
+            android:id="@+id/about"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onAboutClick"
+            android:text="About" />
+
+        <Button
+            android:id="@+id/currentConvo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="onCurrConvoClick"
+            android:text="Current Converstation" />
+
+    </LinearLayout>
 
 </RelativeLayout>
