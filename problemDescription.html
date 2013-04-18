@@ -1,0 +1,63 @@
+<html>
+	<head>
+	  <title>
+	    Android Walkie Talkie
+	  </title>
+	</head>
+<body>
+	<h1 align = "center">Android Walkie Talkie</h1>
+	<p>
+	  In this project the goal is to use the Android Phones as
+Walkie-Talkies (push to talk) devices. The idea is to have a group of
+users specified in some way that can talk to each other as follows:
+when one user activates its microphone (e.g., by pressing a button on
+his/her phone), the voice from that user is digitized, packetized and
+the packets from that user are forwarded to all the other users (as
+VoIP packets), where they are played on their phones. While one user
+talks, all other microphones are disabled, for conflict resolution,
+you can use an ID number or such.
+
+	<p>The groups can be specified in a number of ways, any of them are OK:
+	  <ul>
+	    <li>The users can specify a <q>channel</q> (eventually with a password) and thus is joins the group.
+<li> The users can explicitly select the recipients of their packets
+  (from a list).
+  <li> The groups are pre-established and the user can join any one
+  group (or multiple groups). Not all users in a pre-established group
+  may be present at any one time.
+</ul>
+
+<p>You can assume that the users are on the same IP network (so you can
+  discover other users via broadcast), or, better yet, you can use a
+  centralized server for service discovery (where you connect to see
+  who's available).
+
+<p>This should work at least over WiFi, although it would be nice if
+  the VoIP packets would be parsimonious enough to fit through the
+  EDGE network (although the delay may be a problem).
+
+
+<p>A team attempted the project in
+<a href="../../OldProjects/Fall2009/WalkieTalkie/index.html">Fall
+2009</a>. They did a half-decent job, but used the wrong APIs for
+transfering the data, and thus it worked pretty poorly.
+
+
+<p>To successfully complete this project you need to have:
+<ul>
+<li> Good knowledge of Java;
+</ul>
+
+<h3> Deliverables </h3>
+
+<ul>
+<li> Demonstration 
+<li> Well commented code 
+<li> Report
+</ul>  
+
+</body>
+</html>
+	
+	
+		
