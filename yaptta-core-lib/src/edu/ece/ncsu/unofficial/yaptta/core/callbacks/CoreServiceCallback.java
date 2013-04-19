@@ -5,10 +5,12 @@ import edu.ece.ncsu.unofficial.yaptta.core.conduits.ConduitException;
 import edu.ece.ncsu.unofficial.yaptta.core.conduits.MulticastConduit;
 import edu.ece.ncsu.unofficial.yaptta.core.messages.AbstractMessage;
 import edu.ece.ncsu.unofficial.yaptta.core.messages.requests.GroupListRequest;
+import edu.ece.ncsu.unofficial.yaptta.core.messages.requests.JoinGroupRequest;
 import edu.ece.ncsu.unofficial.yaptta.core.messages.requests.PeersRequest;
 import edu.ece.ncsu.unofficial.yaptta.core.messages.requests.PingRequest;
 import edu.ece.ncsu.unofficial.yaptta.core.messages.requests.RequestGroupsRequest;
 import edu.ece.ncsu.unofficial.yaptta.core.messages.requests.UpdatePeerRequest;
+import edu.ece.ncsu.unofficial.yaptta.core.messages.responses.JoinGroupResponse;
 import edu.ece.ncsu.unofficial.yaptta.core.messages.responses.RequestGroupsResponse;
 
 public class CoreServiceCallback implements edu.ece.ncsu.unofficial.yaptta.core.callbacks.IMessageReceivedCallback {
@@ -33,6 +35,7 @@ public class CoreServiceCallback implements edu.ece.ncsu.unofficial.yaptta.core.
 		else if(UpdatePeerRequest.class.isInstance(message)) processUpdatePeerRequest(message);
 		else if(RequestGroupsRequest.class.isInstance(message)) processRequestGroupsRequest(message);
 		else if(RequestGroupsResponse.class.isInstance(message)) processRequestGroupsResponse((RequestGroupsResponse)message);
+		else if(JoinGroupRequest.class.isInstance(message)) processJoinGroupRequest((JoinGroupRequest)message);
 		
 //		
 //		String filler;
@@ -44,6 +47,39 @@ public class CoreServiceCallback implements edu.ece.ncsu.unofficial.yaptta.core.
 //		
 //		final String msg = "Received: " + filler;
 //		toastHandler.post(new Runnable(){public void run(){Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();}});
+	}
+
+	private void processJoinGroupRequest(JoinGroupRequest message) {
+		if(YapttaState.isGroupMaster() && YapttaState.isInGroup()) {
+			// Check authentication
+			if(YapttaState.isGroupPrivate()) {
+				JoinGroupResponse jgr = new JoinGroupResponse(message.getFromDeviceId());
+				
+				// Check the password
+				if(YapttaState.getGroupPassword().equals(message.getPassword())) {
+					jgr.setAuthenticated(true);
+				} else {
+					jgr.setAuthenticated(false);
+				}
+				
+				// Send out with the auth status
+				try {
+					YapttaState.getCoreConduit().sendMessage(jgr);
+				} catch (ConduitException e) {
+					e.printStackTrace();
+				}
+				
+			} else {
+				// Open group, everyone gets in
+				JoinGroupResponse jgr = new JoinGroupResponse(message.getFromDeviceId());
+				jgr.setAuthenticated(true);
+				try {
+					YapttaState.getCoreConduit().sendMessage(jgr);
+				} catch (ConduitException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 	private void processRequestGroupsRequest(AbstractMessage response) {

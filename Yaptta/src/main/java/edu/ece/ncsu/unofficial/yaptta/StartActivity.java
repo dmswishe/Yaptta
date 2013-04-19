@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,6 +53,10 @@ public class StartActivity extends Activity {
 		}
 		if(groupConduit == null) throw new Exception("Unable to create new group!");
 		YapttaState.setGroupConduit(groupConduit);
+		
+		// Check our inputs and update the state appropriately
+		YapttaState.setGroupPrivate(((RadioGroup)findViewById(R.id.rdoGroupType)).getCheckedRadioButtonId() == R.id.rdoGroupTypeInvite);
+		YapttaState.setGroupPassword(((TextView)findViewById(R.id.editGroupPassword)).getText().toString());
 		
 		// Now just go to the conversation activity
 		Intent i = new Intent(getApplicationContext(), ConversationWindowActivity.class);
