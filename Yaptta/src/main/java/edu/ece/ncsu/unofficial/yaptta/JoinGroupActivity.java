@@ -4,6 +4,7 @@ import edu.ece.ncsu.unofficial.yaptta.core.GroupInfo;
 import edu.ece.ncsu.unofficial.yaptta.core.YapttaState;
 import edu.ece.ncsu.unofficial.yaptta.core.callbacks.SimpleMessageReceivedCallback;
 import edu.ece.ncsu.unofficial.yaptta.core.conduits.ConduitException;
+import edu.ece.ncsu.unofficial.yaptta.core.conduits.MulticastConduit;
 import edu.ece.ncsu.unofficial.yaptta.core.messages.AbstractMessage;
 import edu.ece.ncsu.unofficial.yaptta.core.messages.requests.JoinGroupRequest;
 import edu.ece.ncsu.unofficial.yaptta.core.messages.requests.RequestGroupsRequest;
@@ -13,6 +14,7 @@ import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -22,9 +24,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class JoinGroupActivity extends ListActivity {
-	
+
 	private Handler toastHandler = new Handler();
-	
+
 	public void onCreate(Bundle icicle) {
 		super.onCreate(icicle);
 
@@ -65,10 +67,12 @@ public class JoinGroupActivity extends ListActivity {
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		// Get the group the user clicked
-		String selectedGroupName = (String) getListAdapter().getItem(position);
-		
+		final String selectedGroupName = (String) getListAdapter().getItem(position);
+
 		// Determine if it requires a password
-		for(GroupInfo gi : YapttaState.getKnownGroups()) {
+		for(GroupInfo thisGi : YapttaState.getKnownGroups()) {
+			final GroupInfo gi = thisGi;
+
 			if(gi.getName().equals(selectedGroupName)) {
 				if(gi.isPrivate()) {
 					// Ask for a password
@@ -81,13 +85,13 @@ public class JoinGroupActivity extends ListActivity {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							// Proceed to connect here...
-							String inputtedPassword = passwordInput.getText().toString();
-							
+							final String inputtedPassword = passwordInput.getText().toString();
+
 							final ProgressDialog loading = new ProgressDialog(passwordInput.getContext());
 							loading.setCancelable(true);
 							loading.setMessage("Authenticating...");
 							loading.show();
-							
+
 							// Setup the async authentication response when it comes
 							YapttaState.getCoreConduit().setMessageReceivedCallback(new SimpleMessageReceivedCallback() {
 								@Override
@@ -96,17 +100,31 @@ public class JoinGroupActivity extends ListActivity {
 										JoinGroupResponse jgr = (JoinGroupResponse)response;
 										if(jgr.getRecipient().equals(YapttaState.getDeviceName())) {
 											loading.dismiss();
-											
+
 											if(jgr.isAuthenticated()) {
-												// Change the activity here (and get rid of the Toast)
-												
-												runOnUiThread(new Runnable(){
-													@Override
-													public void run() {
-														Toast.makeText(JoinGroupActivity.this, "Authenticated!", Toast.LENGTH_SHORT).show();
-													}});
+												// Make sure our state is properly set
+												YapttaState.setGroupName(selectedGroupName);
+												YapttaState.setInGroup(true);
+												YapttaState.setGroupMaster(false);
+												YapttaState.setGroupPassword(inputtedPassword);
+
+												// Attempt to setup the conduit
+												try {
+													// Setup the conduit now, but we'll adjust the callback in the new activity
+													YapttaState.setGroupConduit(new MulticastConduit(gi.getPort()));
+
+													// Now switch to the conversation
+													Intent i = new Intent(getApplicationContext(), ConversationWindowActivity.class);
+													startActivity(i);
+												} catch(Exception ex) {
+													runOnUiThread(new Runnable(){
+														@Override
+														public void run() {
+															Toast.makeText(JoinGroupActivity.this, "Error! Unable to initialize connection to group.", Toast.LENGTH_SHORT).show();
+														}});
+												}
 											} else {
-												
+
 												runOnUiThread(new Runnable(){
 													@Override
 													public void run() {
@@ -117,7 +135,7 @@ public class JoinGroupActivity extends ListActivity {
 									}
 								}
 							});
-							
+
 							// Now that the pre-reqs are setup, send the message
 							JoinGroupRequest jgr = new JoinGroupRequest(inputtedPassword);
 							try {
@@ -134,7 +152,7 @@ public class JoinGroupActivity extends ListActivity {
 					loading.setCancelable(false);
 					loading.setMessage("Connecting...");
 					loading.show();
-					
+
 					// Setup the async authentication response when it comes
 					YapttaState.getCoreConduit().setMessageReceivedCallback(new SimpleMessageReceivedCallback() {
 						@Override
@@ -143,17 +161,33 @@ public class JoinGroupActivity extends ListActivity {
 								JoinGroupResponse jgr = (JoinGroupResponse)response;
 								if(jgr.getRecipient().equals(YapttaState.getDeviceName())) {
 									loading.dismiss();
-									
-									runOnUiThread(new Runnable(){
-										@Override
-										public void run() {
-											Toast.makeText(JoinGroupActivity.this, "Connected!", Toast.LENGTH_SHORT).show();
-										}});
+
+									// Make sure our state is properly set
+									YapttaState.setGroupName(selectedGroupName);
+									YapttaState.setInGroup(true);
+									YapttaState.setGroupMaster(false);
+									YapttaState.setGroupPassword("");
+
+									// Attempt to setup the conduit
+									try {
+										// Setup the conduit now, but we'll adjust the callback in the new activity
+										YapttaState.setGroupConduit(new MulticastConduit(gi.getPort()));
+
+										// Now switch to the conversation
+										Intent i = new Intent(getApplicationContext(), ConversationWindowActivity.class);
+										startActivity(i);
+									} catch(Exception ex) {
+										runOnUiThread(new Runnable(){
+											@Override
+											public void run() {
+												Toast.makeText(JoinGroupActivity.this, "Error! Unable to initialize connection to group.", Toast.LENGTH_SHORT).show();
+											}});
+									}
 								}
 							}
 						}
 					});
-					
+
 					// Now that the pre-reqs are setup, send the message
 					JoinGroupRequest jgr = new JoinGroupRequest("");
 					try {
@@ -162,11 +196,8 @@ public class JoinGroupActivity extends ListActivity {
 						e.printStackTrace();
 					}
 				}
-					 
+
 			}
 		}
-		// Toast.makeText(this, item + " selected", Toast.LENGTH_LONG).show();
-
-
 	}
 } 
