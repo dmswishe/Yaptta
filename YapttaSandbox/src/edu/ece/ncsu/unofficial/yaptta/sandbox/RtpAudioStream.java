@@ -17,6 +17,9 @@ public class RtpAudioStream extends Activity{
 
 	
 	private AudioStream myAudioStream;
+	private AudioStream[] myAudioStreams;
+	private int numOfStreams = 0; //don't cross the streams!!
+	private int maxStreams = 10;
     private AudioGroup myAudioGroup;
     private AudioManager myAudioManager;
     private int destPort = 51678;
@@ -25,6 +28,7 @@ public class RtpAudioStream extends Activity{
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_rtpstream);
+		myAudioStreams = new AudioStream[maxStreams]; //hard code make users 10
 	}
 	
 	/*Set the mode of the AudioStream
@@ -43,6 +47,29 @@ public class RtpAudioStream extends Activity{
 			myAudioGroup.setMode(AudioGroup.MODE_MUTED);
 		else
 			myAudioGroup.setMode(AudioGroup.MODE_ECHO_SUPPRESSION);
+	}
+	
+	public void addNewStream(String thisIP){
+		if(numOfStreams == maxStreams) 
+			return;
+		
+		try {
+			InetAddress destAddress = (InetAddress.getAllByName(thisIP))[0];
+			myAudioStreams[numOfStreams] = new AudioStream((InetAddress.getAllByName("127.0.0.1"))[0]);
+			myAudioStreams[numOfStreams].setCodec(AudioCodec.PCMU);
+			myAudioStreams[numOfStreams].setMode(RtpStream.MODE_NORMAL);
+			myAudioStreams[numOfStreams].associate(destAddress, destPort);
+			myAudioStreams[numOfStreams].join(myAudioGroup);
+			numOfStreams++;
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 	}
 	
 	public void connect(View view){
