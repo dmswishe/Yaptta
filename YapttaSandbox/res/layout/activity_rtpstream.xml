@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AbsoluteLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <EditText
+        android:id="@+id/editTextOct1"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_x="17dp"
+        android:layout_y="17dp"
+        android:ems="10"
+        android:text="192" />
+
+    <EditText
+        android:id="@+id/editTextOct2"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_x="84dp"
+        android:layout_y="17dp"
+        android:ems="10"
+        android:text="168" >
+
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/editTextOct3"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_x="154dp"
+        android:layout_y="17dp"
+        android:ems="10"
+        android:text="0" />
+
+    <EditText
+        android:id="@+id/editTextOct4"
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+        android:layout_x="229dp"
+        android:layout_y="15dp"
+        android:ems="10" />
+
+    <Button
+        android:id="@+id/buttonConnect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_x="15dp"
+        android:layout_y="80dp"
+        android:text="Connect"
+        android:onClick="connect" />
+
+</AbsoluteLayout>
