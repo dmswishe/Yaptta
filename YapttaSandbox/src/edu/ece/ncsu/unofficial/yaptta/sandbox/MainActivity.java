@@ -1,5 +1,6 @@
 package edu.ece.ncsu.unofficial.yaptta.sandbox;
 
+
 import edu.ece.ncsu.unofficial.yaptta.core.YapttaConstants;
 import edu.ece.ncsu.unofficial.yaptta.core.conduits.ConduitException;
 import edu.ece.ncsu.unofficial.yaptta.core.conduits.MulticastConduit;
@@ -7,6 +8,7 @@ import edu.ece.ncsu.unofficial.yaptta.core.messages.requests.PingRequest;
 import android.os.Bundle;
 import android.os.Handler;
 import android.app.Activity;
+import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 import android.widget.EditText;
@@ -35,6 +37,11 @@ public class MainActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
+	}
+	
+	public void onConnectClick (View view) {
+    	Intent i = new Intent(getApplicationContext(), RtpAudioStream.class);
+    	startActivity(i); 
 	}
 	
 	public void onSendClick(View view) throws ConduitException

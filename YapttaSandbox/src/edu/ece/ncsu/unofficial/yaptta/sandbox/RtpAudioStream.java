@@ -29,6 +29,8 @@ public class RtpAudioStream extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_rtpstream);
 		myAudioStreams = new AudioStream[maxStreams]; //hard code make users 10
+		myAudioGroup = new AudioGroup();
+		myAudioGroup.setMode(AudioGroup.MODE_ECHO_SUPPRESSION);
 	}
 	
 	/*Set the mode of the AudioStream
@@ -97,8 +99,7 @@ public class RtpAudioStream extends Activity{
 			myAudioManager.setMicrophoneMute(false);
 			myAudioManager.setSpeakerphoneOn(true);
 			 
-			myAudioGroup = new AudioGroup();
-			myAudioGroup.setMode(AudioGroup.MODE_ECHO_SUPPRESSION);
+			
 			 
 			myAudioStream = new AudioStream(InetAddress.getByAddress(new byte[] {(byte)127, (byte)0, (byte)0, (byte)1 }));
 			 
@@ -108,7 +109,7 @@ public class RtpAudioStream extends Activity{
 			 myAudioStream.setCodec(AudioCodec.PCMU);
 			 myAudioStream.setMode(RtpStream.MODE_NORMAL);
 			
-			 //myAudioStream.associate(InetAddress.getByAddress(new byte[] {(byte)192, (byte)168, (byte)0, (byte)2 }), 51468);
+			// myAudioStream.associate(InetAddress.getByAddress(new byte[] {(byte)192, (byte)168, (byte)0, (byte)2 }), 51468);
 			 myAudioStream.associate(destAddress, destPort);
 			 
 			 myAudioStream.join(myAudioGroup);
