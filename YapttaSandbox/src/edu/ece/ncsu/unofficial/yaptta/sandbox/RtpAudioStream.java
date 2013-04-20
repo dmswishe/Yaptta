@@ -9,7 +9,10 @@ import android.content.Context;
 import android.media.AudioManager;
 import android.net.rtp.*;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -31,6 +34,27 @@ public class RtpAudioStream extends Activity{
 		myAudioStreams = new AudioStream[maxStreams]; //hard code make users 10
 		myAudioGroup = new AudioGroup();
 		myAudioGroup.setMode(AudioGroup.MODE_ECHO_SUPPRESSION);
+		
+		final Button pttBtn = (Button) findViewById(R.id.buttonTalk);
+		pttBtn.setOnTouchListener(new View.OnTouchListener() {
+			
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				CheckBox tmpBox = (CheckBox)findViewById(R.id.checkBoxPTTStatus);
+				switch( event.getAction()){
+				case MotionEvent.ACTION_DOWN:
+					setMute(false);
+					tmpBox.setChecked(true);
+					break;
+				case MotionEvent.ACTION_UP:
+					setMute(true);
+					tmpBox.setChecked(false);
+					break;
+				}
+				return false;
+			}
+		});
+		
 	}
 	
 	/*Set the mode of the AudioStream
@@ -51,16 +75,16 @@ public class RtpAudioStream extends Activity{
 			myAudioGroup.setMode(AudioGroup.MODE_ECHO_SUPPRESSION);
 	}
 	
-	public void addNewStream(String thisIP){
+	public void addNewStream(String thisIP, int thisPort){
 		if(numOfStreams == maxStreams) 
 			return;
 		
 		try {
 			InetAddress destAddress = (InetAddress.getAllByName(thisIP))[0];
-			myAudioStreams[numOfStreams] = new AudioStream((InetAddress.getAllByName("127.0.0.1"))[0]);
+			myAudioStreams[numOfStreams] = new AudioStream((InetAddress.getAllByName("0.0.0.0"))[0]);
 			myAudioStreams[numOfStreams].setCodec(AudioCodec.PCMU);
 			myAudioStreams[numOfStreams].setMode(RtpStream.MODE_NORMAL);
-			myAudioStreams[numOfStreams].associate(destAddress, destPort);
+			myAudioStreams[numOfStreams].associate(destAddress, thisPort);
 			myAudioStreams[numOfStreams].join(myAudioGroup);
 			numOfStreams++;
 		} catch (SocketException e) {
@@ -82,6 +106,7 @@ public class RtpAudioStream extends Activity{
 		tmpText.setText("" + myAudioStream.getRemotePort());
 		
 	}
+	
 	
 	public void connect(View view){
 		popUp("trying to Connect");
@@ -125,6 +150,8 @@ public class RtpAudioStream extends Activity{
 			 myAudioStream.associate(destAddress, destPort);
 			 
 			 myAudioStream.join(myAudioGroup);
+			 
+			 myAudioGroup.setMode(AudioGroup.MODE_MUTED);
 			printDebug();
 			
 			

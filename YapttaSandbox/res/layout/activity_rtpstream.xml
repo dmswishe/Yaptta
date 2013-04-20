@@ -81,16 +81,16 @@
         android:id="@+id/editTextLocalPortDisplay"
         android:layout_width="102dp"
         android:layout_height="wrap_content"
-        android:layout_x="18dp"
-        android:layout_y="258dp"
+        android:layout_x="13dp"
+        android:layout_y="414dp"
         android:ems="10" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_x="23dp"
-        android:layout_y="228dp"
+        android:layout_x="18dp"
+        android:layout_y="384dp"
         android:text="Local Port"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -98,8 +98,8 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_x="141dp"
-        android:layout_y="230dp"
+        android:layout_x="136dp"
+        android:layout_y="386dp"
         android:text="Dest Port"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
@@ -107,8 +107,24 @@
         android:id="@+id/editTextDestPortDisplay"
         android:layout_width="109dp"
         android:layout_height="wrap_content"
-        android:layout_x="141dp"
-        android:layout_y="260dp"
+        android:layout_x="136dp"
+        android:layout_y="416dp"
         android:ems="10" />
+
+    <Button
+        android:id="@+id/buttonTalk"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_x="23dp"
+        android:layout_y="224dp"
+        android:text="Talk" />
+
+    <CheckBox
+        android:id="@+id/checkBoxPTTStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="33dp"
+        android:layout_x="27dp"
+        android:layout_y="273dp"
+        android:text="Transmiting" />
 
 </AbsoluteLayout>
