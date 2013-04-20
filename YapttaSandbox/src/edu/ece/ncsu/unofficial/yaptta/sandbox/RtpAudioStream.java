@@ -74,6 +74,15 @@ public class RtpAudioStream extends Activity{
 		
 	}
 	
+	private void printDebug(){
+		EditText tmpText = (EditText)findViewById(R.id.editTextLocalPortDisplay);
+		tmpText.setText("" + myAudioStream.getLocalPort());
+		
+		tmpText = (EditText)findViewById(R.id.editTextDestPortDisplay);
+		tmpText.setText("" + myAudioStream.getRemotePort());
+		
+	}
+	
 	public void connect(View view){
 		popUp("trying to Connect");
 		String sDestAddress;
@@ -89,6 +98,9 @@ public class RtpAudioStream extends Activity{
 		tmpText = (EditText)findViewById(R.id.editTextOct4);	
 		sDestAddress = sDestAddress + "." + tmpText.getText().toString();
 		
+		tmpText = (EditText)findViewById(R.id.editTextDestPort);
+		destPort = Integer.parseInt(tmpText.getText().toString());
+		
 		//popUp(sDestAddress);
 		try {
 			InetAddress destAddress = (InetAddress.getAllByName(sDestAddress))[0];
@@ -101,9 +113,9 @@ public class RtpAudioStream extends Activity{
 			 
 			
 			 
-			myAudioStream = new AudioStream(InetAddress.getByAddress(new byte[] {(byte)127, (byte)0, (byte)0, (byte)1 }));
+			myAudioStream = new AudioStream(InetAddress.getByAddress(new byte[] {(byte)0, (byte)0, (byte)0, (byte)0 }));
 			 
-			 popUp("Local Port" + myAudioStream.getLocalPort());
+			// popUp("Local Port" + myAudioStream.getLocalPort());
 			// popUp("" + audioStream.getLocalAddress());
 			 
 			 myAudioStream.setCodec(AudioCodec.PCMU);
@@ -113,7 +125,7 @@ public class RtpAudioStream extends Activity{
 			 myAudioStream.associate(destAddress, destPort);
 			 
 			 myAudioStream.join(myAudioGroup);
-			
+			printDebug();
 			
 			
 			
