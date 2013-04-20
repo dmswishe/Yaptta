@@ -185,6 +185,10 @@ public class ConversationWindowActivity extends Activity{
 		onLeaveClick(getCurrentFocus());
 	}
 	
+	/**
+	 * Handler for when the Leave button is clicked.
+	 * @param view
+	 */
 	public void onLeaveClick(View view) {
 		// Stop all our audio streaming
 		YapttaState.resetAudioHub(this);
@@ -192,8 +196,9 @@ public class ConversationWindowActivity extends Activity{
 		// Leave the group
 		YapttaState.resetGroupMembership();
 		
-		// Go back to main screen
+		// Go back to main screen (and don't let us go back to this one)
 		Intent i = new Intent(getApplicationContext(), MainActivity.class);
 		startActivity(i);
+		finish();
 	}
 }

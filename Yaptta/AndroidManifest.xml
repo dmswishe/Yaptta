@@ -23,7 +23,7 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="edu.ece.ncsu.unofficial.yaptta.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name" android:screenOrientation="portrait" android:clearTaskOnLaunch="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,15 +32,15 @@
         </activity>
         <activity
             android:name="edu.ece.ncsu.unofficial.yaptta.StartActivity"
-            android:label="@string/title_activity_start_group" >
+            android:label="@string/title_activity_start_group" android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="edu.ece.ncsu.unofficial.yaptta.JoinGroupActivity"
-            android:label="@string/title_activity_join" >
+            android:label="@string/title_activity_join" android:screenOrientation="portrait">
         </activity>
         <activity
             android:name="edu.ece.ncsu.unofficial.yaptta.ConversationWindowActivity"
-            android:label="@string/title_activity_conversation_window" >
+            android:label="@string/title_activity_conversation_window" android:screenOrientation="portrait">
         </activity>
     </application>
 

@@ -21,6 +21,9 @@ public class StartActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_start_group);
+		
+		// Make sure we're starting with a "good" core conduit
+		YapttaState.resetGroupMembership();
 	}
 
 	@Override
@@ -61,6 +64,7 @@ public class StartActivity extends Activity {
 		// Now just go to the conversation activity
 		Intent i = new Intent(getApplicationContext(), ConversationWindowActivity.class);
 		startActivity(i);
+		finish();
 		
 //		Context context = getApplicationContext();
 //    	CharSequence text = "Discover Peers Button clicked!";

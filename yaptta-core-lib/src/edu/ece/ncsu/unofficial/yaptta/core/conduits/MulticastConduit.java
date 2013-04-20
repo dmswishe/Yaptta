@@ -11,6 +11,7 @@ import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.MulticastLock;
 import edu.ece.ncsu.unofficial.yaptta.core.YapttaConstants;
+import edu.ece.ncsu.unofficial.yaptta.core.YapttaState;
 import edu.ece.ncsu.unofficial.yaptta.core.callbacks.IMessageReceivedCallback;
 import edu.ece.ncsu.unofficial.yaptta.core.messages.AbstractMessage;
 
@@ -120,7 +121,10 @@ public class MulticastConduit extends AbstractConduit {
 			listenerThreadMaster = new Thread(listenerThreadInstance);
 			listenerThreadMaster.start();			
 		}
-		else throw new ConduitException("Already listening.");
+		else {
+			// throw new ConduitException("Already listening.");
+			setMessageReceivedCallback(callback);
+		}
 	}
 	
 	public void stopListening() {
