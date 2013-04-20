@@ -56,20 +56,6 @@
             android:onClick="onStartClick"
             android:text="Start Group" />
 
-        <Button
-            android:id="@+id/about"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="onAboutClick"
-            android:text="About" />
-
-        <Button
-            android:id="@+id/currentConvo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="onCurrConvoClick"
-            android:text="Current Converstation" />
-
     </LinearLayout>
 
 </RelativeLayout>

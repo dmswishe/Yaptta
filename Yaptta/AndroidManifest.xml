@@ -35,20 +35,8 @@
             android:label="@string/title_activity_start_group" >
         </activity>
         <activity
-            android:name="edu.ece.ncsu.unofficial.yaptta.AboutActivity"
-            android:label="@string/title_activity_about" >
-        </activity>
-        <activity
             android:name="edu.ece.ncsu.unofficial.yaptta.JoinGroupActivity"
             android:label="@string/title_activity_join" >
-        </activity>
-        <activity
-            android:name="edu.ece.ncsu.unofficial.yaptta.DeviceSettingsActivity"
-            android:label="@string/title_activity_device_settings" >
-        </activity>
-        <activity
-            android:name="edu.ece.ncsu.unofficial.yaptta.DiscoverPeersActivity"
-            android:label="@string/title_activity_discover_peers" >
         </activity>
         <activity
             android:name="edu.ece.ncsu.unofficial.yaptta.ConversationWindowActivity"

@@ -4,13 +4,19 @@ import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.content.Context;
 import android.media.AudioManager;
 import android.net.rtp.AudioGroup;
 import android.net.rtp.AudioStream;
+import android.os.Build;
 import android.os.Handler;
+import android.view.View;
 
 import edu.ece.ncsu.unofficial.yaptta.core.conduits.MulticastConduit;
 
+@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
 public class YapttaState {
 	
 	private static YapttaState instance = new YapttaState();
@@ -29,8 +35,6 @@ public class YapttaState {
 	
 	private InetAddress groupHostAddress;
 	private int groupHostPort;
-	
-	private Handler convoHandler;
 	
 	public static AudioGroup myAudioGroup;
 	public static AudioStream myAudioStream;
@@ -138,13 +142,39 @@ public class YapttaState {
 	public static void setGroupHostPort(int groupHostPort) {
 		instance.groupHostPort = groupHostPort;
 	}
-
-	public static Handler getConvoHandler() {
-		return instance.convoHandler;
+	
+	/**
+	 * Configures the audio settings to be ready for a new group session.
+	 * @param ref The activity from which this method is being called.
+	 */
+	public static void resetAudioHub(Activity ref) {
+		
+		// Close out any audio streams
+		for(AudioStream as : YapttaState.clientAudioStreams) {
+			as.join(null);
+			as.release();
+			as = null;
+		}
+		YapttaState.clientAudioStreams.clear();
+		
+		// Clear out the group
+		if(YapttaState.myAudioGroup != null) YapttaState.myAudioGroup.clear();
+		
+		// Reset the audio mode
+		YapttaState.myAudioManager =  (AudioManager) ref.getSystemService(Context.AUDIO_SERVICE); 
+		YapttaState.myAudioManager.setMode(AudioManager.MODE_NORMAL);
 	}
 
-	public static void setConvoHandler(Handler convoHandler) {
-		instance.convoHandler = convoHandler;
+	/**
+	 * Stops listening on the group conduit and removes any vital flags indicating group membership.
+	 */
+	public static void resetGroupMembership() {
+		YapttaState.setInGroup(false);
+		YapttaState.setGroupMaster(false);
+		YapttaState.setGroupName(null);
+		if(YapttaState.getGroupConduit() != null) YapttaState.getGroupConduit().stopListening();
+		YapttaState.setGroupConduit(null);
+		
 	}
 
 }

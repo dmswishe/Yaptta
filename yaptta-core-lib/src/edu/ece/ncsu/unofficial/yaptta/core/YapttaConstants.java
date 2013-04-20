@@ -1,5 +1,10 @@
 package edu.ece.ncsu.unofficial.yaptta.core;
 
+import android.annotation.TargetApi;
+import android.net.rtp.AudioCodec;
+import android.os.Build;
+
+@TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
 public class YapttaConstants {
 	
 	public static class Network {
@@ -18,6 +23,8 @@ public class YapttaConstants {
 		public static final int DEFAULT_PACKET_BUFFER_SIZE = 10240; // in bytes
 		
 		public static final int BLOCKING_TIMEOUT = 100; // in milliseconds
+		
+		public static final AudioCodec AUDIO_CODEC = AudioCodec.PCMU;
 		
 	}
 	

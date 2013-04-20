@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ece.ncsu.unofficial.yaptta.R;
+import edu.ece.ncsu.unofficial.yaptta.core.YapttaConstants;
 import edu.ece.ncsu.unofficial.yaptta.core.YapttaState;
 import edu.ece.ncsu.unofficial.yaptta.core.conduits.ConduitException;
 import edu.ece.ncsu.unofficial.yaptta.core.messages.requests.MasterConnectRequest;
@@ -22,6 +23,7 @@ import android.os.Handler;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
@@ -36,25 +38,50 @@ public class ConversationWindowActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_conversation_window);
 
+		// Since the user is reconnecting, unjoin any streams and remove any references that happen to still exist
+		for(AudioStream as : YapttaState.clientAudioStreams) {
+			as.join(null);
+			as.release();
+			as = null;
+		}
 		YapttaState.clientAudioStreams.clear();
-		
-		setupUiStatus();
+
+		// Setup stuff pertaining to the UI ...
+		setupUi();
+
+		// ... then go on to establish the RTP audio connection
 		setupRtpPrereqs();
 	}
 
+	/**
+	 * Setup the connection for use of the RTP library functions
+	 */
 	private void setupRtpPrereqs() {
+		// Establish some basic settings
 		YapttaState.myAudioManager =  (AudioManager) getSystemService(Context.AUDIO_SERVICE); 
 		YapttaState.myAudioManager.setMode(AudioManager.MODE_IN_COMMUNICATION);
 		YapttaState.myAudioManager.adjustVolume(AudioManager.ADJUST_RAISE, 0);
 		YapttaState.myAudioManager.setMicrophoneMute(false);
 		YapttaState.myAudioManager.setSpeakerphoneOn(true);
 
-		YapttaState.myAudioGroup = new AudioGroup();
+		// Create the new RTP AudioGroup 
+		if(YapttaState.myAudioGroup == null) {
+			YapttaState.myAudioGroup = new AudioGroup();
+		} else {
+			// if it was already created, make sure any old references are gone
+			YapttaState.myAudioGroup.clear();
+		}
 		YapttaState.myAudioGroup.setMode(AudioGroup.MODE_ECHO_SUPPRESSION);
 
+		// Attempt to create the local AudioStream
 		try {
+			// Bind the stream to any interface
 			YapttaState.myAudioStream = new AudioStream(InetAddress.getByAddress(new byte[]{0,0,0,0}));
-			YapttaState.myAudioStream.setCodec(AudioCodec.PCMU);
+
+			// Use the default codec
+			YapttaState.myAudioStream.setCodec(YapttaConstants.Network.AUDIO_CODEC);
+
+			// Allow duplex communication
 			YapttaState.myAudioStream.setMode(AudioStream.MODE_NORMAL);
 		} catch(Exception ex) {
 			ex.printStackTrace();
@@ -62,36 +89,41 @@ public class ConversationWindowActivity extends Activity{
 
 		// setup the streams differently if acting as master
 		if(YapttaState.isGroupMaster()) {
-			// we're good for now, don't need to do anything
+
+			// Since we're the master, we should just associate locally since there's nothing to connect to at the moment
 			try {
 				YapttaState.myAudioStream.associate(InetAddress.getByName("0.0.0.0"), YapttaState.getGroupHostPort());
 			} catch (UnknownHostException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			// Set the port here so that join requests get the right port later on
+
+			// Update the generated local port so that join requests get the right port later on
 			YapttaState.setGroupHostPort(YapttaState.myAudioStream.getLocalPort());
-			
+
 		} else {
-			// Setup the connection to the group master
+			// Otherwise, we're a client, so go ahead and setup the connection to the group master
 			YapttaState.myAudioStream.associate(YapttaState.getGroupHostAddress(), YapttaState.getGroupHostPort());
-			
-			// Now tell the group master to connect to me
+
+			// Now tell the group master to connect to me (since another random local port was created from creation of the new AudioStream above)
 			MasterConnectRequest mcr = new MasterConnectRequest(YapttaState.getGroupName(), YapttaState.myAudioStream.getLocalPort());
 			try {
 				YapttaState.getCoreConduit().sendMessage(mcr);
 			} catch (ConduitException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}			
 		}
-		
+
+		// Now that the AudioStream is setup and associated (whether master or slave), go ahead and join the hub
 		YapttaState.myAudioStream.join(YapttaState.myAudioGroup);
+		setMute(true); // mute until the PTT button is held
 	}
 
-	private void setupUiStatus() {
-		// Update the UI to reflect the group we're in
+	/**
+	 * Initialize UI components with helpful information about the current state of the connection.
+	 */
+	private void setupUi() {
+
+		// Determine what our IP address is on the WiFi network
 		WifiManager wm = (WifiManager)getSystemService(Context.WIFI_SERVICE);
 		InetAddress wifiIp = null;
 		try {
@@ -101,40 +133,41 @@ public class ConversationWindowActivity extends Activity{
 			temp = ipBytes[1]; ipBytes[1] = ipBytes[2]; ipBytes[2] = temp;
 			wifiIp = InetAddress.getByAddress(ipBytes);
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String statusText;
+
+		// Build up a string to give us more info about our connection
+		String statusText = "status";
 		if(wifiIp == null) {
-			statusText =  "Unknown in " + YapttaState.getGroupName();
+			statusText =  "<localhost> in " + YapttaState.getGroupName();
 		} else {
 			InetAddress hostAddress = YapttaState.getGroupHostAddress();
-			statusText =  wifiIp.getHostAddress() + " in " + YapttaState.getGroupName() + " (" + ((hostAddress != null) ? hostAddress.getHostAddress() : "unknown") + ")";
+			statusText =  wifiIp.getHostAddress() + " in " + YapttaState.getGroupName() + " (" + ((hostAddress != null) ? hostAddress.getHostAddress() : "master") + ")";
 		}
 		((TextView)findViewById(R.id.textSpeakingIn)).setText(statusText);
-		
+
 		// Attach the handler for the PTT button
-		final Button pttBtn = (Button) findViewById(R.id.pttBtn);
+		Button pttBtn = (Button) findViewById(R.id.pttBtn);
 		pttBtn.setOnTouchListener(new View.OnTouchListener() {
-			
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-				//CheckBox tmpBox = (CheckBox)findViewById(R.id.checkBoxPTTStatus);
-				switch( event.getAction()){
-				case MotionEvent.ACTION_DOWN:
-					setMute(false);
-					break;
-				case MotionEvent.ACTION_UP:
-					setMute(true);
-					break;
+				// Basically, unmute the mic when pressed, mute when released 
+				switch( event.getAction()) {
+					case MotionEvent.ACTION_DOWN:
+						setMute(false);
+						break;
+					case MotionEvent.ACTION_UP:
+						setMute(true);
+						break;
 				}
 				return false;
 			}
 		});
 	}
 
-	/*Mutes the current Stream
-	 * mute = true Mutes the stream, False un-mutes
+	/**
+	 * Set the muting status of the AudioStream
+	 * @param mute Boolean value indicating if the stream should be muted (true) or not (false). 
 	 */
 	public void setMute(boolean mute){
 		if(mute)
@@ -142,12 +175,25 @@ public class ConversationWindowActivity extends Activity{
 		else
 			YapttaState.myAudioGroup.setMode(AudioGroup.MODE_ECHO_SUPPRESSION);
 	}
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.conversation_window, menu);
-		return true;
-	}
 
+	
+	/**
+	 * Override the operation of the back button and run the same code as the "Leave" button.
+	 */
+	@Override
+	public void onBackPressed() {
+		onLeaveClick(getCurrentFocus());
+	}
+	
+	public void onLeaveClick(View view) {
+		// Stop all our audio streaming
+		YapttaState.resetAudioHub(this);
+		
+		// Leave the group
+		YapttaState.resetGroupMembership();
+		
+		// Go back to main screen
+		Intent i = new Intent(getApplicationContext(), MainActivity.class);
+		startActivity(i);
+	}
 }

@@ -23,59 +23,21 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@android:color/black" />
-    
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Group Host"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Member List" />
-
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Volume:"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-
-    <SeekBar
-        android:id="@+id/seekBar1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:id="@+id/btnDiscoverPeers"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Leave" />
-
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Network Test" />
-
-    <EditText
-        android:id="@+id/editGroupName"
-        android:layout_width="179dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:ems="10" >
-
-        <requestFocus />
-    </EditText>
 
     <Button
         android:id="@+id/pttBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_margin="16dp"
+        android:text="Push\nTo\nTalk"
+        android:textSize="40sp" />
+
+    <Button
+        android:id="@+id/btnLeave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Push To Talk" />
+        android:onClick="onLeaveClick"
+        android:text="Leave" />
 
 </LinearLayout>
