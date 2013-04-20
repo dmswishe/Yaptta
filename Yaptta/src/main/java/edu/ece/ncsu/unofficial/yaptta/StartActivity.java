@@ -24,19 +24,25 @@ public class StartActivity extends Activity {
 		
 		// Make sure we're starting with a "good" core conduit
 		YapttaState.resetGroupMembership();
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.start_group, menu);
-		return true;
+		
+		// Generate a useful default group name
+		String genGroupName = YapttaState.getDeviceName() + " Group - " + ((int)(Math.random() * 1000));
+		findEditGroupName().setText(genGroupName);
 	}
 	
+	/**
+	 * Convenience method for accessing the typed group name
+	 * @return
+	 */
 	private TextView findEditGroupName() {
 		return (TextView)findViewById(R.id.editGroupName);
 	}
 	
+	/**
+	 * Click handler for the Start Group button
+	 * @param view
+	 * @throws Exception
+	 */
 	public void onStartGroupClick (View view) throws Exception {
 		
 		// Set up our application state
@@ -44,18 +50,19 @@ public class StartActivity extends Activity {
 		YapttaState.setGroupName(findEditGroupName().getText().toString());
 		YapttaState.setInGroup(true);
 		
-		// Try to create the new multicast group (try three times to bind on a random port)
-		MulticastConduit groupConduit = null;
-		for(int i = 0; i < 3; i++) {
-			try {
-				groupConduit = new MulticastConduit(YapttaConstants.Network.GROUP_PORT_BASE + (int)(Math.random() * YapttaConstants.Network.GROUP_PORT_RANGE));
-			} catch(Exception ex) {
-				continue;
-			}
-			break;
-		}
-		if(groupConduit == null) throw new Exception("Unable to create new group!");
-		YapttaState.setGroupConduit(groupConduit);
+		// The below has been removed since we're now using RTP:
+		//// Try to create the new multicast group (try three times to bind on a random port)
+		//MulticastConduit groupConduit = null;
+		//for(int i = 0; i < 3; i++) {
+		//	try {
+		//		groupConduit = new MulticastConduit(YapttaConstants.Network.GROUP_PORT_BASE + (int)(Math.random() * YapttaConstants.Network.GROUP_PORT_RANGE));
+		//	} catch(Exception ex) {
+		//		continue;
+		//	}
+		//	break;
+		//}
+		//if(groupConduit == null) throw new Exception("Unable to create new group!");
+		//YapttaState.setGroupConduit(groupConduit);
 		
 		// Check our inputs and update the state appropriately
 		YapttaState.setGroupPrivate(((RadioGroup)findViewById(R.id.rdoGroupType)).getCheckedRadioButtonId() == R.id.rdoGroupTypeInvite);
@@ -65,11 +72,5 @@ public class StartActivity extends Activity {
 		Intent i = new Intent(getApplicationContext(), ConversationWindowActivity.class);
 		startActivity(i);
 		finish();
-		
-//		Context context = getApplicationContext();
-//    	CharSequence text = "Discover Peers Button clicked!";
-//		Toast.makeText(context, text, Toast.LENGTH_SHORT).show(); 
-//    	Intent i = new Intent(getApplicationContext(), DiscoverPeersActivity.class);
-//    	startActivity(i);
 	}
 }

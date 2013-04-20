@@ -129,7 +129,7 @@ public class CoreServiceCallback implements edu.ece.ncsu.unofficial.yaptta.core.
 		if(YapttaState.isGroupMaster() && YapttaState.isInGroup()) {
 			RequestGroupsResponse rgr = new RequestGroupsResponse();
 			rgr.setGroupName(YapttaState.getGroupName());
-			rgr.setPort(YapttaState.getGroupConduit().getPort());
+			rgr.setPort(0); // port doesn't matter due to RTP right now
 			rgr.setPrivate(YapttaState.isGroupPrivate());
 			try {
 				this.coreConduitRef.sendMessage(rgr);
