@@ -56,6 +56,9 @@ public class MulticastListenerThread implements Runnable {
 				ObjectInputStream ois = new ObjectInputStream(bais);
 				AbstractMessage am = (AbstractMessage) ois.readObject();
 				
+				// Save who the sender was
+				am.setSender(packet.getAddress());
+				
 				// Call the data received handler as appropriate
 				if(callback != null) callback.messageReceived(am);
 				

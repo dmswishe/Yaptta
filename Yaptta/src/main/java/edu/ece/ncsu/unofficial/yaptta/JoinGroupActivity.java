@@ -107,6 +107,7 @@ public class JoinGroupActivity extends ListActivity {
 												YapttaState.setInGroup(true);
 												YapttaState.setGroupMaster(false);
 												YapttaState.setGroupPassword(inputtedPassword);
+												YapttaState.setGroupHostAddress(jgr.getSender());
 
 												// Attempt to setup the conduit
 												try {
@@ -167,6 +168,7 @@ public class JoinGroupActivity extends ListActivity {
 									YapttaState.setInGroup(true);
 									YapttaState.setGroupMaster(false);
 									YapttaState.setGroupPassword("");
+									YapttaState.setGroupHostAddress(jgr.getSender());
 
 									// Attempt to setup the conduit
 									try {

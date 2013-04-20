@@ -5,6 +5,7 @@ public class JoinGroupRequest extends AbstractMulticastRequest {
 	private static final long serialVersionUID = 5047849620547870084L;
 	
 	private String password;
+	private int port;
 	
 	public JoinGroupRequest(String password) {
 		this.password = password;
@@ -16,6 +17,14 @@ public class JoinGroupRequest extends AbstractMulticastRequest {
 	
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public int getPort() {
+		return port;
+	}
+
+	public void setPort(int port) {
+		this.port = port;
 	}
 
 }

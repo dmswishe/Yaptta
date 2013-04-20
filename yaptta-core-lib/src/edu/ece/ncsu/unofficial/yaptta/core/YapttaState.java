@@ -1,7 +1,13 @@
 package edu.ece.ncsu.unofficial.yaptta.core;
 
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
+
+import android.media.AudioManager;
+import android.net.rtp.AudioGroup;
+import android.net.rtp.AudioStream;
+import android.os.Handler;
 
 import edu.ece.ncsu.unofficial.yaptta.core.conduits.MulticastConduit;
 
@@ -20,6 +26,16 @@ public class YapttaState {
 	
 	private MulticastConduit coreConduit = null;
 	private MulticastConduit groupConduit = null;
+	
+	private InetAddress groupHostAddress;
+	private int groupHostPort;
+	
+	private Handler convoHandler;
+	
+	public static AudioGroup myAudioGroup;
+	public static AudioStream myAudioStream;
+	public static List<AudioStream> clientAudioStreams = new ArrayList<AudioStream>();
+	public static AudioManager myAudioManager;
 
 	private List<GroupInfo> knownGroups = new ArrayList<GroupInfo>();
 	
@@ -105,6 +121,30 @@ public class YapttaState {
 			if(groupName.equals(gi.getName())) alreadyExists = true;
 		}
 		if(!alreadyExists) instance.knownGroups.add(new GroupInfo(groupName, port, isPrivate));
+	}
+
+	public static InetAddress getGroupHostAddress() {
+		return instance.groupHostAddress;
+	}
+
+	public static void setGroupHostAddress(InetAddress groupHostAddress) {
+		instance.groupHostAddress = groupHostAddress;
+	}
+	
+	public static int getGroupHostPort() {
+		return instance.groupHostPort;
+	}
+
+	public static void setGroupHostPort(int groupHostPort) {
+		instance.groupHostPort = groupHostPort;
+	}
+
+	public static Handler getConvoHandler() {
+		return instance.convoHandler;
+	}
+
+	public static void setConvoHandler(Handler convoHandler) {
+		instance.convoHandler = convoHandler;
 	}
 
 }
