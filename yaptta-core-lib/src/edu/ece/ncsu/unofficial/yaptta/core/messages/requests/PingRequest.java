@@ -1,5 +1,8 @@
 package edu.ece.ncsu.unofficial.yaptta.core.messages.requests;
 
+/**
+ * Debugging data structure.
+ */
 public class PingRequest extends AbstractMulticastRequest {
 
 	private static final long serialVersionUID = 6656483902221394212L;

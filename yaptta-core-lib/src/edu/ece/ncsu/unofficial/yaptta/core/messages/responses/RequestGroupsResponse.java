@@ -1,5 +1,8 @@
 package edu.ece.ncsu.unofficial.yaptta.core.messages.responses;
 
+/**
+ * Response to a RequestGroupsRequest. Contains information about the group the responder is hosting.
+ */
 public class RequestGroupsResponse extends AbstractMulticastResponse {
 
 	private static final long serialVersionUID = -7590731393438802756L;

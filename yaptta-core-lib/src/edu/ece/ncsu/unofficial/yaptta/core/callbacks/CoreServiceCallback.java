@@ -9,6 +9,7 @@ import android.net.rtp.AudioCodec;
 import android.net.rtp.AudioStream;
 import android.net.rtp.RtpStream;
 import android.os.Build;
+import edu.ece.ncsu.unofficial.yaptta.core.YapttaConstants;
 import edu.ece.ncsu.unofficial.yaptta.core.YapttaState;
 import edu.ece.ncsu.unofficial.yaptta.core.conduits.ConduitException;
 import edu.ece.ncsu.unofficial.yaptta.core.conduits.MulticastConduit;
@@ -23,24 +24,29 @@ import edu.ece.ncsu.unofficial.yaptta.core.messages.requests.UpdatePeerRequest;
 import edu.ece.ncsu.unofficial.yaptta.core.messages.responses.JoinGroupResponse;
 import edu.ece.ncsu.unofficial.yaptta.core.messages.responses.RequestGroupsResponse;
 
+/**
+ * Main background callback that operates on core messages
+ */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
 public class CoreServiceCallback implements edu.ece.ncsu.unofficial.yaptta.core.callbacks.IMessageReceivedCallback {
 
 	private MulticastConduit coreConduitRef = null;
-	
+
 	public CoreServiceCallback(MulticastConduit ref) {
 		this.coreConduitRef = ref;
 	}
-	
+
 	@Override
 	public void messageReceived(AbstractMessage message) {
-		
+
 		// Filter the message through the following sieve to act on it appropriately
-		if(false) {}
-		
+		if(false) { 
+			// just a placeholder so the following code looks more organized
+		}
+
 		// Generic requests
 		else if(PingRequest.class.isInstance(message)) processPingRequest(message);
-		
+
 		// Group and peer handling
 		else if(PeersRequest.class.isInstance(message)) processPeersRequest(message);
 		else if(UpdatePeerRequest.class.isInstance(message)) processUpdatePeerRequest(message);
@@ -48,44 +54,42 @@ public class CoreServiceCallback implements edu.ece.ncsu.unofficial.yaptta.core.
 		else if(RequestGroupsResponse.class.isInstance(message)) processRequestGroupsResponse((RequestGroupsResponse)message);
 		else if(JoinGroupRequest.class.isInstance(message)) processJoinGroupRequest((JoinGroupRequest)message);
 		else if(MasterConnectRequest.class.isInstance(message)) processMasterConnectRequest((MasterConnectRequest)message);
-		
-//		
-//		String filler;
-//		if(PingRequest.class.isInstance(response)) {
-//			filler = ((PingRequest)response).getText();
-//		} else {
-//			filler = response.getClass().getCanonicalName();
-//		}
-//		
-//		final String msg = "Received: " + filler;
-//		toastHandler.post(new Runnable(){public void run(){Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();}});
+
+
+		//// Debugging notification
+		//String filler;
+		//if(PingRequest.class.isInstance(response)) {
+		//	filler = ((PingRequest)response).getText();
+		//} else {
+		//	filler = response.getClass().getCanonicalName();
+		//}
+		//
+		//final String msg = "Received: " + filler;
+		//toastHandler.post(new Runnable(){public void run(){Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();}});
 	}
 
 	private void processMasterConnectRequest(MasterConnectRequest message) {
 		if(YapttaState.isGroupMaster() && YapttaState.isInGroup()) {
 			if(message.getGroupName().equals(YapttaState.getGroupName())) {
+				// If we're the master, are in a group, and received a connection request for OUR group, oblige the requestor
 				AudioStream clientStream = null;
 				try {
 					clientStream = new AudioStream(InetAddress.getByAddress(new byte[] {0,0,0,0}));
 				} catch (SocketException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (UnknownHostException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				 
-				// popUp("Local Port" + myAudioStream.getLocalPort());
-				// popUp("" + audioStream.getLocalAddress());
-				 
-				clientStream.setCodec(AudioCodec.PCMU);
-				clientStream.setMode(RtpStream.MODE_NORMAL);
+
+				// Setup stream properties
+				clientStream.setCodec(YapttaConstants.Network.AUDIO_CODEC);
+				clientStream.setMode(AudioStream.MODE_NORMAL);
 				
-				// myAudioStream.associate(InetAddress.getByAddress(new byte[] {(byte)192, (byte)168, (byte)0, (byte)2 }), 51468);
+				// Connect with the port information provided by the sender
 				clientStream.associate(message.getSender(), message.getPort());
-				 
 				clientStream.join(YapttaState.myAudioGroup);
-				
+
+				// Keep track of the streams we have
 				YapttaState.clientAudioStreams.add(clientStream);
 			}
 		}
@@ -93,28 +97,28 @@ public class CoreServiceCallback implements edu.ece.ncsu.unofficial.yaptta.core.
 
 	private void processJoinGroupRequest(JoinGroupRequest message) {
 		if(YapttaState.isGroupMaster() && YapttaState.isInGroup()) {
-			// Check authentication
 			if(YapttaState.isGroupPrivate()) {
+				// If we're the group master and we're actively running the *authenticated* group...
 				JoinGroupResponse jgr = new JoinGroupResponse(message.getFromDeviceId());
-				
+
 				// Check the password
 				if(YapttaState.getGroupPassword().equals(message.getPassword())) {
-					jgr.setAuthenticated(true);
+					jgr.setAuthenticated(true); // good password
 				} else {
-					jgr.setAuthenticated(false);
+					jgr.setAuthenticated(false); // bad password
 				}
-				
+
 				// Send out with the auth status
 				try {
 					YapttaState.getCoreConduit().sendMessage(jgr);
 				} catch (ConduitException e) {
 					e.printStackTrace();
 				}
-				
+
 			} else {
-				// Open group, everyone gets in
+				// Otherwise, we're running a group and it's open auth
 				JoinGroupResponse jgr = new JoinGroupResponse(message.getFromDeviceId());
-				jgr.setAuthenticated(true);
+				jgr.setAuthenticated(true); // let the requestor know they are authenticated
 				try {
 					YapttaState.getCoreConduit().sendMessage(jgr);
 				} catch (ConduitException e) {
@@ -138,23 +142,21 @@ public class CoreServiceCallback implements edu.ece.ncsu.unofficial.yaptta.core.
 			}
 		}
 	}
-	
+
 	private void processRequestGroupsResponse(RequestGroupsResponse response) {
 		YapttaState.addKnownGroup(response.getGroupName(), response.getPort(), response.isPrivate());
 	}
 
 	private void processUpdatePeerRequest(AbstractMessage response) {
-		// TODO Auto-generated method stub
-		
+		// To be implemented?
 	}
 
 	private void processPeersRequest(AbstractMessage response) {
-		// TODO Auto-generated method stub
-		
+		// To be implemented?
 	}
 
 	private void processPingRequest(AbstractMessage m) {
-		
+		// To be implemented?
 	}
 
 }

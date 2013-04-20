@@ -1,5 +1,8 @@
 package edu.ece.ncsu.unofficial.yaptta.core;
 
+/**
+ * Data structure for holding information about a group.
+ */
 public class GroupInfo {
 	private String name;
 	private int port;

@@ -14,6 +14,7 @@ public class YapttaConstants {
 		public static final int IPTOS_THROUGHPUT = 0x08; 
 		public static final int IPTOS_LOWDELAY = 0x10;
 		
+		// Configuration items
 		public static final int BROADCAST_PORT = 28000;
 		public static final int GROUP_PORT_BASE = 28001;
 		public static final int GROUP_PORT_RANGE=  1000;
@@ -25,16 +26,17 @@ public class YapttaConstants {
 		public static final int BLOCKING_TIMEOUT = 100; // in milliseconds
 		
 		public static final AudioCodec AUDIO_CODEC = AudioCodec.PCMU;
-		
 	}
 	
 	public static class UI {
-		
+		// The name of the preferences store
 		public static final String PREFERENCE_STORE_NAME = "YapttaPrefs";
 		
 	}
 	
 	public static class Preferences {
+		
+		// The key for the storing the device name between sessions
 		public static final String DEVICE_NAME = "deviceName";
 		
 	}

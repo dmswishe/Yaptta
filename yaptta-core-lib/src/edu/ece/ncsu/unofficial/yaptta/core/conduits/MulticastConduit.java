@@ -11,10 +11,12 @@ import android.content.Context;
 import android.net.wifi.WifiManager;
 import android.net.wifi.WifiManager.MulticastLock;
 import edu.ece.ncsu.unofficial.yaptta.core.YapttaConstants;
-import edu.ece.ncsu.unofficial.yaptta.core.YapttaState;
 import edu.ece.ncsu.unofficial.yaptta.core.callbacks.IMessageReceivedCallback;
 import edu.ece.ncsu.unofficial.yaptta.core.messages.AbstractMessage;
 
+/**
+ * Conduit which implements UDP multicast functionality
+ */
 public class MulticastConduit extends AbstractConduit {
 	
 	private WifiManager wm;
@@ -26,6 +28,11 @@ public class MulticastConduit extends AbstractConduit {
 	private MulticastListenerThread listenerThreadInstance;
 	private Thread listenerThreadMaster;
 	
+	/**
+	 * Creates a new multicast conduit.
+	 * @param context Can be null during testing, but required if running as an Android app.
+	 * @param port Port number on which the conduit should listen.
+	 */
 	public MulticastConduit(Context context, int port)
 	{
 		try
@@ -57,6 +64,10 @@ public class MulticastConduit extends AbstractConduit {
 		}
 	}
 	
+	/**
+	 * Creates a new multicast conduit for testing purposes (do not use in an application).
+	 * @param port Port number on which the conduit should listen.
+	 */
 	public MulticastConduit(int port)
 	{
 		this(null, port);
@@ -99,6 +110,9 @@ public class MulticastConduit extends AbstractConduit {
 		}
 	}
 
+	/**
+	 * Determines if the conduit is monitoring the channel for new messages.
+	 */
 	public boolean isListening() {
 		if(listenerThreadMaster != null) {
 			return listenerThreadMaster.isAlive();
@@ -127,6 +141,9 @@ public class MulticastConduit extends AbstractConduit {
 		}
 	}
 	
+	/**
+	 * Tells the conduit to halt its listening thread.
+	 */
 	public void stopListening() {
 		if(isListening()) listenerThreadInstance.markForHalt();
 	}

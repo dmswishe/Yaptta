@@ -5,9 +5,13 @@ import java.net.InetAddress;
 
 import edu.ece.ncsu.unofficial.yaptta.core.YapttaState;
 
+/**
+ * Serializable base class for messages.
+ */
 public abstract class AbstractMessage implements Serializable {
 	private static final long serialVersionUID = 6393442260025558318L;
 
+	// Whenever a message is created, automatically populate it with the current device name
 	private String fromDeviceId = YapttaState.getDeviceName();
 	private InetAddress sender = null;
 	

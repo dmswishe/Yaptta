@@ -1,5 +1,8 @@
 package edu.ece.ncsu.unofficial.yaptta.core.messages.requests;
 
+/**
+ * Request from client to master when client wishes to connect to a group. Contains password information.
+ */
 public class JoinGroupRequest extends AbstractMulticastRequest {
 
 	private static final long serialVersionUID = 5047849620547870084L;

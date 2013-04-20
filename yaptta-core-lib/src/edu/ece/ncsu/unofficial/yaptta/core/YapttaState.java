@@ -16,6 +16,9 @@ import android.view.View;
 
 import edu.ece.ncsu.unofficial.yaptta.core.conduits.MulticastConduit;
 
+/**
+ * Static class for maintaining application state and coordinating data between the various activities.
+ */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR1)
 public class YapttaState {
 	
@@ -118,6 +121,12 @@ public class YapttaState {
 		return instance.knownGroups;
 	}
 	
+	/**
+	 * Creates a GroupInfo and adds it to the known groups.
+	 * @param groupName
+	 * @param port
+	 * @param isPrivate
+	 */
 	public static void addKnownGroup(String groupName, int port, boolean isPrivate) {
 		// Make sure the group doesn't already exist
 		boolean alreadyExists = false;
