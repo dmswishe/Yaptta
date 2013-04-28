@@ -1,0 +1,46 @@
+<html>
+
+<head>
+	<title>ECE575 Spring 2013 - Team A3 - Android Walkie Talkie</title>
+</head>
+
+<body bgcolor="#cccccc">
+
+<h1>ECE575 Spring 2013 - Team A3 - Android Walkie Talkie</h1>
+	<h2>Yaptta - Yet Another Push-To-Talk Application</h2>
+		<hr/>
+		<h3>Practical Problems</h3>
+		<p>
+			By far, the biggest hurdle encountered was that of multicast compatibility:
+<ul>
+<li>The Android OS itself supports multicast traffic, but it ignores multicast packets by default in order to save battery life. To overcome this, one must use the <a href="http://developer.android.com/reference/android/net/wifi/WifiManager.MulticastLock.html">WifiManager API</a>. Yaptta's implementation can be found in the MulticastConduit class.
+<li>Some devices do not support multicast at all; it seems their kernels were compiled with support disabled completely. Unfortunately there is not a definitive list of compatibility, and the only way to tell seems to require debugging access to the phone (<a href="http://code.google.com/p/android/issues/detail?id=51195">example issue</a>)
+<li>Some routers have special options for IGMP/multicast functionality. If experiencing issues, check with your networking hardware configuration console and adjust appropriately.
+</ul>
+
+<p>
+Another issue encountered was compatibility with the <a href="http://developer.android.com/reference/android/net/rtp/package-summary.html">Android RTP package</a>. It seems it uses (a set of) codecs which may not be present depending on your ROM. This would be indicated in logcat messages when establishing the conversation connection; it would say it could not open a stream of type 0. The problem seems to be ROM-dependent, with the issue observed on both CyanogenMod 9.1 and 10.0 ROMs for the HTC Sensation 4g. The Codename Lungo ROM (lightweight CM 10.1), as well as the stock HTC ICS ROM, worked well.
+</p>
+
+<p>
+Windows 8 currently seems to exhibit some adb/fastboot compatibility issues; specifically, when a new ROM had to be loaded on the HTC Sensation 4g, a different computer had to be used that had Windows 7 installed so that the fastboot command line could be used.
+</p>
+
+<p>
+Depending on your device, Developer Options/USB Debugging mode may not be available. If there are no Developer Options showing, you can go to the main device settings, &quot;About Device&quot;, and tap the build number seven times to unlock the options. Then, go into the Developer Options to enabled USB Debugging.
+</p>
+
+<p>
+When debugging via USB, be sure to have your device vendor's drivers installed, else adb (and thus any debugging on hardware) will be unavailable. Sometimes, you might also have to switch the media transfer mode from MTP to PTP (an option which should come up on your notifications). Vendors vary widely, however, so it is recommend to perform web searches for your device + &quot;usb debugging&quot; to get up and running.
+</p>
+
+<p>
+Be sure to have the appropriate Android SDK API level installed, or else you may encounter build errors.
+</p>
+
+<p>
+Fully inspect XML resources and configuration files at the source level. There are many different non-obvious options (especially permissions) that can be set which affect application operation.
+</p>
+
+</body>
+</html>
