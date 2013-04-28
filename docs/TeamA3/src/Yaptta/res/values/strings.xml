@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Yaptta</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_start_group">Create Yaptta Group</string>
+    <string name="title_activity_join">Detected Yaptta Groups</string>
+    <string name="title_activity_conversation_window">Yaptta Conversation</string>
+
+</resources>
